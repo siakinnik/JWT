@@ -29,41 +29,41 @@
  **/
 
 #include <Arduino.h>
-#include "ArduinoJWT.h"
+#include "JWT.h"
 #include "base64.hpp"
 #include "sha256.h"
 
 // The standard JWT header already base64 encoded. Equates to {"alg": "HS256", "typ": "JWT"}
 const PROGMEM char* jwtHeader = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
 
-ArduinoJWT::ArduinoJWT(String psk) {
+JWT::JWT(String psk) {
   _psk = psk;
 }
 
-ArduinoJWT::ArduinoJWT(char* psk) {
+JWT::JWT(char* psk) {
   _psk = String(psk);
 }
 
-void ArduinoJWT::setPSK(String psk) {
+void JWT::setPSK(String psk) {
   _psk = psk;
 }
-void ArduinoJWT::setPSK(char* psk) {
+void JWT::setPSK(char* psk) {
   _psk = String(psk);
 }
 
-int ArduinoJWT::getJWTLength(String& payload) {
+int JWT::getJWTLength(String& payload) {
   return getJWTLength((char*)payload.c_str());
 }
 
-int ArduinoJWT::getJWTLength(char* payload) {
+int JWT::getJWTLength(char* payload) {
   return strlen(jwtHeader) + encode_base64_length(strlen(payload)) + encode_base64_length(32) + 2;
 }
 
-int ArduinoJWT::getJWTPayloadLength(String& jwt) {
+int JWT::getJWTPayloadLength(String& jwt) {
   return getJWTPayloadLength((char*)jwt.c_str());
 }
 
-int ArduinoJWT::getJWTPayloadLength(char* jwt) {
+int JWT::getJWTPayloadLength(char* jwt) {
   char jwtCopy[strlen(jwt)];
   memcpy((char*)jwtCopy, jwt, strlen(jwt));
     // Get all three jwt parts
@@ -78,13 +78,13 @@ int ArduinoJWT::getJWTPayloadLength(char* jwt) {
   }
 }
 
-String ArduinoJWT::encodeJWT(String& payload) {
+String JWT::encodeJWT(String& payload) {
   char jwt[getJWTLength(payload)];
   encodeJWT((char*)payload.c_str(), (char*)jwt);
   return String(jwt);
 }
 
-void ArduinoJWT::encodeJWT(char* payload, char* jwt) {
+void JWT::encodeJWT(char* payload, char* jwt) {
   unsigned char* ptr = (unsigned char*)jwt;
   // Build the initial part of the jwt (header.payload)
   memcpy(ptr, jwtHeader, strlen(jwtHeader));
@@ -111,7 +111,7 @@ void ArduinoJWT::encodeJWT(char* payload, char* jwt) {
   *(ptr) = 0;
 }
 
-bool ArduinoJWT::decodeJWT(String& jwt, String& payload) {
+bool JWT::decodeJWT(String& jwt, String& payload) {
   int payloadLength = getJWTPayloadLength(jwt);
   if(payloadLength > 0) {
     char jsonPayload[payloadLength];
@@ -123,7 +123,7 @@ bool ArduinoJWT::decodeJWT(String& jwt, String& payload) {
   return false;
 }
 
-bool ArduinoJWT::decodeJWT(char* jwt, char* payload, int payloadLength) {
+bool JWT::decodeJWT(char* jwt, char* payload, int payloadLength) {
   // Get all three jwt parts
   const char* sep = ".";
   char* encodedHeader = strtok(jwt, sep);

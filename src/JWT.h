@@ -35,13 +35,13 @@
 
 
 
-class ArduinoJWT {
+class JWT {
 private:
   String _psk;
 
 public:
-  ArduinoJWT(String psk);
-  ArduinoJWT(char* psk);
+  JWT(String psk);
+  JWT(char* psk);
 
   // Set a new psk for encoding and decoding JWTs
   void setPSK(String psk);

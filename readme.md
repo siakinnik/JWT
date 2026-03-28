@@ -1,6 +1,8 @@
 # Arduino JSON Web Token Library
 
-Library for encoding and decoding JSON web tokens for the Arduino and ESP8266 platforms.
+Library for encoding and decoding JSON web tokens for the Arduino and ESP platforms.
+
+Forked from https://github.com/chrismoorhouse/ArduinoJWT/ just to rename the class and use in ZeroLamp
 
 ## Limitations
 
@@ -12,6 +14,7 @@ Library for encoding and decoding JSON web tokens for the Arduino and ESP8266 pl
  - Arduino
  - Intel Galileo/Edison
  - ESP8266
+ - ESP32
 
 ## License
 
